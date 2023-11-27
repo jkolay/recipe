@@ -43,6 +43,7 @@ public class IngredientController {
             @ApiResponse(responseCode = "200", description = "Successful request"),
     })
     @RequestMapping(method = RequestMethod.GET, path = "/page/{page}/size/{size}")
+    @ResponseStatus(HttpStatus.FOUND)
     public List<IngredientResponse> getIngredientList(@PathVariable(name = "page") int page,
                                                       @PathVariable(name = "size") int size) {
         logger.info("Getting the ingredients");
@@ -60,6 +61,7 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "Ingredient not found by the given ID")
     })
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.FOUND)
     public IngredientResponse getIngredient(@Parameter(description = "Ingredient ID", required = true) @PathVariable(name = "id") Integer id) {
         logger.info("Getting the ingredient by its id. Id: {}", id);
         return ingredientService.getIngredient(id);
@@ -73,12 +75,12 @@ public class IngredientController {
     @Operation(description = "Create an ingredient")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Ingredient created"),
-            @ApiResponse(responseCode = "400", description = "Bad input")
+            @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public IngredientResponse createIngredient(
-            @Parameter(description = "Properties of the Ingredient", required = true) @Valid @RequestBody CreateIngredientRequest request) {
+            @Parameter(description = "Name of the Ingredient", required = true) @Valid @RequestBody CreateIngredientRequest request) {
         logger.info("Creating the ingredient with properties");
         return ingredientService.create(request);
     }
@@ -90,12 +92,13 @@ public class IngredientController {
     @Operation(description = "Create list of ingredient")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Ingredient created"),
-            @ApiResponse(responseCode = "400", description = "Bad input")
+            @ApiResponse(responseCode = "400", description = "Bad input"),
+            @ApiResponse(responseCode = "404", description = "Ingredients not created")
     })
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public List<IngredientResponse> createIngredients(
-            @Parameter(description = "Properties of the Ingredient", required = true) @Valid @RequestBody List<CreateIngredientRequest> requests) {
+            @Parameter(description = "Name of the Ingredient", required = true) @Valid @RequestBody List<CreateIngredientRequest> requests) {
         logger.info("Creating the ingredient with properties");
         return ingredientService.createIngredients(requests);
     }
@@ -111,6 +114,7 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "Ingredient not found by the given ID")
     })
     @RequestMapping(method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteIngredient(@Parameter(description = "ingredient ID", required = true) @NotNull(message = "{id.notNull}") @RequestParam(name = "id") Integer id) {
         logger.info("Deleting the ingredient by its id. Id: {}", id);
         ingredientService.delete(id);

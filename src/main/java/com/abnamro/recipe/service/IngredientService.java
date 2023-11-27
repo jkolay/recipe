@@ -3,7 +3,7 @@ package com.abnamro.recipe.service;
 
 import com.abnamro.recipe.config.RecipeValidationMessageConfig;
 import com.abnamro.recipe.exception.IngredientDuplicationException;
-import com.abnamro.recipe.exception.RecipeNotFoundException;
+import com.abnamro.recipe.exception.IngredientNotFoundException;
 import com.abnamro.recipe.mapper.CommonConfigMapper;
 import com.abnamro.recipe.model.persistence.IngredientDao;
 import com.abnamro.recipe.model.request.CreateIngredientRequest;
@@ -56,7 +56,7 @@ public class IngredientService {
 
     private IngredientDao findById(int id) {
         return ingredientRepository.findById(id)
-                .orElseThrow(() -> new RecipeNotFoundException(RecipeValidationMessageConfig.INGREDIENT_IS_NOT_AVAILABLE + id));
+                .orElseThrow(() -> new IngredientNotFoundException(RecipeValidationMessageConfig.INGREDIENT_IS_NOT_AVAILABLE + id));
     }
 
     public List<IngredientResponse> list(int page, int size) {
@@ -70,7 +70,7 @@ public class IngredientService {
     public void delete(int id) {
         if (!ingredientRepository.existsById(id)) {
             logger.error("Ingredient is not found ");
-            throw new RecipeNotFoundException(RecipeValidationMessageConfig.INGREDIENT_IS_NOT_AVAILABLE);
+            throw new IngredientNotFoundException(RecipeValidationMessageConfig.INGREDIENT_IS_NOT_AVAILABLE);
         }
         ingredientRepository.deleteById(id);
     }

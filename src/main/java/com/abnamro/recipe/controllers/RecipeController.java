@@ -45,6 +45,7 @@ public class RecipeController {
     @Operation(description = "List all recipes")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successful request"),})
     @RequestMapping(method = RequestMethod.GET, path = "/page/{page}/size/{size}")
+    @ResponseStatus(HttpStatus.FOUND)
     public List<RecipeResponse> getRecipeList(@PathVariable(name = "page") int page, @PathVariable(name = "size") int size) {
         logger.info("Getting the recipes");
         return recipeService.getRecipeList(page, size);
@@ -60,6 +61,7 @@ public class RecipeController {
     @Operation(description = "List one recipe by its ID")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successful request"), @ApiResponse(responseCode = "404", description = "Recipe not found by the given ID")})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.FOUND)
     public RecipeResponse getRecipe(@Parameter(description = "Recipe ID", required = true) @PathVariable(name = "id") Integer id) {
         logger.info("Getting the recipe by its id. Id: {}", id);
         return recipeService.getRecipeById(id);
@@ -88,6 +90,7 @@ public class RecipeController {
     @Operation(description = "Update the recipe")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Ingredient created"), @ApiResponse(responseCode = "400", description = "Bad input")})
     @RequestMapping(method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
     public void updateRecipe(@Parameter(description = "Properties of the recipe", required = true) @Valid @RequestBody UpdateRecipeRequest updateRecipeRequest) {
         logger.info("Updating the recipe by given properties");
         recipeService.updateRecipe(updateRecipeRequest);
@@ -102,6 +105,7 @@ public class RecipeController {
     @Operation(description = "Delete the recipe")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successful operation"), @ApiResponse(responseCode = "400", description = "Invalid input"), @ApiResponse(responseCode = "404", description = "Recipe not found by the given ID")})
     @RequestMapping(method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteRecipe(@Parameter(description = "Recipe ID", required = true) @NotNull(message = "{id.notNull}") @RequestParam(name = "id") Integer id) {
         logger.info("Deleting the recipe by its id. Id: {}", id);
         recipeService.deleteRecipe(id);
@@ -121,6 +125,7 @@ public class RecipeController {
 
     })
     @RequestMapping(method = RequestMethod.POST, path = "/search")
+    @ResponseStatus(HttpStatus.FOUND)
     public List<RecipeResponse> searchRecipe(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @Parameter(description = "Properties of the the search") @RequestBody @Valid RecipeSearchRequest recipeSearchRequest) {
         logger.info("Searching the recipe by given criteria");
         return recipeService.findBySearchCriteria(recipeSearchRequest, page, size);
