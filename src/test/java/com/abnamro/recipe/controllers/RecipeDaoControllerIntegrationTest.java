@@ -66,7 +66,7 @@ public class RecipeDaoControllerIntegrationTest extends AbstractControllerIntegr
         RecipeDao savedRecipeDao = recipeRepository.save(RecipeDao);
 
         performGet("/api/v1/recipe/" + savedRecipeDao.getId())
-                .andExpect(status().isOk())
+                .andExpect(status().isFound())
                 .andExpect(jsonPath("$.id").value(savedRecipeDao.getId()))
                 .andExpect(jsonPath("$.name").value(savedRecipeDao.getName()))
                 .andExpect(jsonPath("$.instructions").value(savedRecipeDao.getInstructions()))
@@ -95,7 +95,7 @@ public class RecipeDaoControllerIntegrationTest extends AbstractControllerIntegr
         recipeRepository.saveAll(storedRecipeListDao);
 
         MvcResult result = performGet("/api/v1/recipe/page/0/size/10")
-                .andExpect(status().isOk())
+                .andExpect(status().isFound())
                 .andReturn();
 
         List<RecipeResponse> RecipeList = getListFromMvcResult(result, RecipeResponse.class);
@@ -161,7 +161,7 @@ public class RecipeDaoControllerIntegrationTest extends AbstractControllerIntegr
 
         //call search endpoint by previously created criteria
         MvcResult result = performPost("/api/v1/recipe/search", request)
-                .andExpect(status().isOk())
+                .andExpect(status().isFound())
                 .andReturn();
 
         Optional<RecipeDao> optionalRecipe = recipeRepository.findById(id);

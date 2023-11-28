@@ -1,6 +1,7 @@
 package com.abnamro.recipe.unit.services;
 
 import com.abnamro.recipe.builder.IngredientTestDataBuilder;
+import com.abnamro.recipe.exception.IngredientNotFoundException;
 import com.abnamro.recipe.exception.RecipeNotFoundException;
 import com.abnamro.recipe.mapper.CommonConfigMapper;
 import com.abnamro.recipe.model.persistence.IngredientDao;
@@ -58,7 +59,7 @@ public class IngredientServiceTest {
    @Test
     public void test_deleteIngredient_notFound() {
         when(ingredientRepository.existsById(anyInt())).thenReturn(false);
-        assertThrows(RecipeNotFoundException.class,()->ingredientService.delete(1));
+        assertThrows(IngredientNotFoundException.class,()->ingredientService.delete(1));
     }
 
     @Test
